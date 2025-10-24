@@ -81,13 +81,13 @@ __all__ = [
     # 'PredictionMetrics',
     
     # Optimization
-    'OptunaOptimizer',
-    'HyperparameterTuning',
+    # 'OptunaOptimizer',
+    # 'HyperparameterTuning',
     
     # Targets
     'ChEMBLTargets',
     'get_chembl_targets',
-    'TargetUtils',
+    # 'TargetUtils',
     
     # GUI
     'MainWindow',
