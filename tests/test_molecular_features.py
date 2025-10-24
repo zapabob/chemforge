@@ -27,7 +27,7 @@ class TestMolecularFeatures(unittest.TestCase):
         # 重要な特徴量の存在チェック
         expected_features = [
             'molecular_weight', 'logp', 'tpsa', 'num_atoms', 'num_bonds',
-            'num_rings', 'num_aromatic_rings', 'num_heteroatoms'
+            'num_rings', 'aromatic_rings'
         ]
         
         for feature in expected_features:

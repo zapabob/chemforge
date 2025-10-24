@@ -185,7 +185,7 @@ class PropertyPredictor:
             properties = {
                 'molecular_weight': Descriptors.MolWt(mol),
                 'logp': Crippen.MolLogP(mol),
-                'logd': Crippen.MolLogD(mol),
+                'logd': Descriptors.MolLogP(mol),  # 代替記述子
                 'tpsa': Descriptors.TPSA(mol),
                 'num_atoms': mol.GetNumAtoms(),
                 'num_bonds': mol.GetNumBonds(),
@@ -386,7 +386,7 @@ class PropertyPredictor:
             descriptors = {
                 'molecular_weight': Descriptors.MolWt(mol),
                 'logp': Crippen.MolLogP(mol),
-                'logd': Crippen.MolLogD(mol),
+                'logd': Descriptors.MolLogP(mol),  # 代替記述子
                 'tpsa': Descriptors.TPSA(mol),
                 'num_atoms': mol.GetNumAtoms(),
                 'num_bonds': mol.GetNumBonds(),

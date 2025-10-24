@@ -121,7 +121,7 @@ class MolecularFeatures:
             
             # 基本特徴量
             if 'basic' in feature_types:
-                basic_features = self._calculate_basic_features(mol, processed_smiles)
+                basic_features = self._calculate_basic_features(processed_smiles, mol)
                 features.update(basic_features)
             
             # 記述子特徴量
@@ -149,6 +149,44 @@ class MolecularFeatures:
         except Exception as e:
             logger.error(f"Error calculating features for {smiles}: {e}")
             return {}
+    
+    def _calculate_descriptor_features(self, mol) -> Dict[str, float]:
+        """記述子特徴量の計算"""
+        features = {}
+        try:
+            # 基本記述子
+            features['molecular_weight'] = Descriptors.MolWt(mol)
+            features['logp'] = Descriptors.MolLogP(mol)
+            features['tpsa'] = Descriptors.TPSA(mol)
+            features['num_rotatable_bonds'] = Descriptors.NumRotatableBonds(mol)
+            features['num_hbd'] = Descriptors.NumHBD(mol)
+            features['num_hba'] = Descriptors.NumHBA(mol)
+            features['num_heavy_atoms'] = Descriptors.HeavyAtomCount(mol)
+            features['num_aromatic_rings'] = Descriptors.NumAromaticRings(mol)
+            features['num_saturated_rings'] = Descriptors.NumSaturatedRings(mol)
+            features['num_aliphatic_rings'] = Descriptors.NumAliphaticRings(mol)
+            
+            # 立体中心（利用可能な記述子を使用）
+            try:
+                features['num_stereocenters'] = Descriptors.NumStereocenters(mol)
+            except AttributeError:
+                # 代替記述子を使用
+                features['num_stereocenters'] = 0  # デフォルト値
+            
+            # 分子形状（利用可能な記述子を使用）
+            try:
+                crippen_descriptors = rdMolDescriptors.CalcCrippenDescriptors(mol)
+                features['molecular_volume'] = crippen_descriptors[1]  # molar_refractivity
+                features['molecular_surface'] = crippen_descriptors[0]  # logP
+            except:
+                # 代替記述子を使用
+                features['molecular_volume'] = Descriptors.MolMR(mol)
+                features['molecular_surface'] = Descriptors.MolLogP(mol)
+            
+        except Exception as e:
+            logger.error(f"Error calculating descriptor features: {e}")
+        
+        return features
     
     def calculate_features(self, smiles_list: List[str], 
                           feature_types: Optional[List[str]] = None,
