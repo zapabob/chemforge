@@ -132,17 +132,17 @@ class ModelFactory:
             buckets = {"trivial": 2, "fund": 4, "adj": 2}
         
         model = MolecularTransformer(
-            vocab_size=input_dim,  # vocab_sizeとして使用
-            d_model=hidden_dim,    # d_modelとして使用
-            n_heads=num_heads,     # n_headsとして使用
-            n_layers=num_layers,   # n_layersとして使用
-            d_ff=hidden_dim * 4,   # d_ffとして使用（一般的な設定）
-            max_len=512,           # デフォルト値
-            dropout=dropout,
+            input_dim=input_dim,      # 特徴量次元数（連続値）
+            hidden_dim=hidden_dim,    # 隠れ層次元数
+            num_layers=num_layers,    # レイヤー数
+            num_heads=num_heads,      # アテンションヘッド数
+            num_targets=num_targets,  # 出力次元数
             use_pwa_pet=use_pwa_pet,
-            pwa_buckets=buckets,
+            buckets=buckets,
+            use_rope=use_rope,
+            use_pet=use_pet,
             pet_curv_reg=pet_curv_reg,
-            use_rope=use_rope
+            dropout=dropout
         )
         
         logger.info(f"Transformer model created: PWA+PET={use_pwa_pet}, {num_layers} layers")

@@ -98,7 +98,9 @@ class Trainer:
             
             # Compute loss
             if isinstance(output, dict):
-                loss = output.get('loss', torch.tensor(0.0))
+                if 'loss' not in output:
+                    raise ValueError("Model output dictionary must contain 'loss' key")
+                loss = output['loss']
             else:
                 loss = output
             

@@ -45,12 +45,11 @@ from .gui.prediction_widget import PredictionWidget
 from .gui.visualization_widget import VisualizationWidget
 from .gui.chat_widget import ChatWidget
 
-# CLI imports
-from .cli.main import main
-from .cli.train import train_cli
-from .cli.predict import predict_cli
-from .cli.chat import chat_cli
-
+# CLI imports (commented out due to multiple import errors - need to fix CLI modules first)
+# from .cli.main import main
+# from .cli.train import main as train_cli
+# from .cli.predict import main as predict_cli
+# from .cli.chat import chat_cli  # ファイルが存在しない
 # Main predictor class
 from .core.multi_target_predictor import MultiTargetPredictor
 
@@ -95,11 +94,11 @@ __all__ = [
     'ChatWidget',
     
     # CLI
-    'main',
-    'train_cli',
-    'predict_cli',
-    'chat_cli',
-    
+        # CLI (commented out)
+    # 'main',
+    # 'train_cli',
+    # 'predict_cli',
+    # 'chat_cli',
     # Main predictor
     'MultiTargetPredictor',
     
