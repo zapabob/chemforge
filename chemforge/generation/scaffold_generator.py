@@ -230,7 +230,7 @@ class ScaffoldGenerator:
                 'num_rings': Descriptors.RingCount(mol),
                 'num_aromatic_rings': Descriptors.NumAromaticRings(mol),
                 'num_heteroatoms': Descriptors.NumHeteroatoms(mol),
-                'fraction_csp3': Descriptors.FractionCsp3(mol),
+                'fraction_csp3': Descriptors.FractionCSP3(mol),
                 'heavy_atom_count': Descriptors.HeavyAtomCount(mol),
                 'nhoh_count': Descriptors.NHOHCount(mol),
                 'no_count': Descriptors.NOCount(mol)

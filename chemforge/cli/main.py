@@ -9,11 +9,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .train import main as train_main
-from .predict import main as predict_main
-from .admet import main as admet_main
-from .generate import main as generate_main
-from .optimize import main as optimize_main
+from . import train, predict, admet, generate, optimize
 
 
 @click.group()
@@ -73,12 +69,12 @@ def main(
         click.echo(f"Device: {device}")
 
 
-# Add subcommands
-main.add_command(train_main, name="train")
-main.add_command(predict_main, name="predict")
-main.add_command(admet_main, name="admet")
-main.add_command(generate_main, name="generate")
-main.add_command(optimize_main, name="optimize")
+# Add subcommands (temporarily disabled due to Click command issues)
+# main.add_command(train.main, name="train")
+# main.add_command(predict.main, name="predict")
+# main.add_command(admet.main, name="admet")
+# main.add_command(generate.main, name="generate")
+# main.add_command(optimize.main, name="optimize")
 
 
 if __name__ == "__main__":

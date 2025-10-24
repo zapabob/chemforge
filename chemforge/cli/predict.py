@@ -5,7 +5,7 @@ ChemForge CLI - Predict Command
 力価予測、ADMET予測、分子生成
 """
 
-import argparse
+import click
 import yaml
 import torch
 import numpy as np
@@ -300,25 +300,23 @@ def predict_external_apis(smiles_list: List[str], output_path: str):
         import traceback
         traceback.print_exc()
 
-def main():
-    """メイン関数"""
-    parser = argparse.ArgumentParser(description="ChemForge Predict Command")
-    parser.add_argument("--model", help="モデルファイルパス（力価予測用）")
-    parser.add_argument("--config", help="設定ファイルパス（力価予測用）")
-    parser.add_argument("--smiles", nargs="+", help="SMILES文字列リスト")
-    parser.add_argument("--input", help="入力ファイルパス（CSV）")
-    parser.add_argument("--output", required=True, help="出力ファイルパス")
-    parser.add_argument("--prediction-type", choices=["potency", "admet", "external"], required=True, help="予測タイプ")
-    
-    args = parser.parse_args()
+@click.command()
+@click.option("--model", help="モデルファイルパス（力価予測用）")
+@click.option("--config", help="設定ファイルパス（力価予測用）")
+@click.option("--smiles", multiple=True, help="SMILES文字列リスト")
+@click.option("--input", help="入力ファイルパス（CSV）")
+@click.option("--output", "-o", required=True, help="出力ファイルパス")
+@click.option("--prediction-type", "-t", type=click.Choice(["potency", "admet", "external"]), required=True, help="予測タイプ")
+def main(model, config, smiles, input, output, prediction_type):
+    """予測コマンド"""
     
     # SMILES取得
     smiles_list = []
-    if args.smiles:
-        smiles_list = args.smiles
-    elif args.input:
+    if smiles:
+        smiles_list = list(smiles)
+    elif input:
         try:
-            df = pd.read_csv(args.input)
+            df = pd.read_csv(input)
             if 'smiles' in df.columns:
                 smiles_list = df['smiles'].tolist()
             else:

@@ -5,7 +5,7 @@ ChemForge CLI - Train Command
 力価予測モデル学習、ADMET予測モデル学習
 """
 
-import argparse
+import click
 import yaml
 import torch
 import numpy as np
@@ -292,22 +292,19 @@ def train_admet_model(config_path: str, data_path: str, output_dir: str):
         import traceback
         traceback.print_exc()
 
-def main():
-    """メイン関数"""
-    parser = argparse.ArgumentParser(description="ChemForge Train Command")
-    parser.add_argument("--config", required=True, help="設定ファイルパス")
-    parser.add_argument("--data", required=True, help="データファイルパス")
-    parser.add_argument("--output", required=True, help="出力ディレクトリ")
-    parser.add_argument("--model-type", choices=["potency", "admet"], default="potency", help="モデルタイプ")
-    
-    args = parser.parse_args()
-    
-    if args.model_type == "potency":
-        train_potency_model(args.config, args.data, args.output)
-    elif args.model_type == "admet":
-        train_admet_model(args.config, args.data, args.output)
+@click.command()
+@click.option("--config", "-c", required=True, help="設定ファイルパス")
+@click.option("--data", "-d", required=True, help="データファイルパス")
+@click.option("--output", "-o", required=True, help="出力ディレクトリ")
+@click.option("--model-type", "-t", type=click.Choice(["potency", "admet"]), default="potency", help="モデルタイプ")
+def main(config, data, output, model_type):
+    """学習コマンド"""
+    if model_type == "potency":
+        train_potency_model(config, data, output)
+    elif model_type == "admet":
+        train_admet_model(config, data, output)
     else:
-        print(f"[ERROR] 未知のモデルタイプ: {args.model_type}")
+        click.echo(f"[ERROR] 未知のモデルタイプ: {model_type}")
 
 if __name__ == "__main__":
     main()
