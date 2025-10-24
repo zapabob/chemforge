@@ -100,7 +100,7 @@ checkpoints/
 *.json
 *.pkl
 *.pickle
-data/
+# data/  # ChemForgeのdata/ディレクトリは含める
 datasets/
 
 # IDE
