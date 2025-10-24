@@ -11,7 +11,7 @@ import logging
 import yaml
 from pathlib import Path
 
-from .transformer_model import TransformerRegressor
+from .transformer import MolecularTransformer
 from .gnn_model import GNNRegressor, MolecularGNN, MultiScaleGNN
 from .ensemble_model import EnsembleRegressor, HybridEnsemble, AdaptiveEnsemble
 
@@ -108,7 +108,7 @@ class ModelFactory:
         use_pet: bool = True,
         pet_curv_reg: float = 1e-5,
         dropout: float = 0.1
-    ) -> TransformerRegressor:
+    ) -> MolecularTransformer:
         """
         Transformerモデルを作成
         
@@ -131,18 +131,18 @@ class ModelFactory:
         if buckets is None:
             buckets = {"trivial": 2, "fund": 4, "adj": 2}
         
-        model = TransformerRegressor(
-            input_dim=input_dim,
-            hidden_dim=hidden_dim,
-            num_layers=num_layers,
-            num_heads=num_heads,
-            num_targets=num_targets,
+        model = MolecularTransformer(
+            vocab_size=input_dim,  # vocab_sizeとして使用
+            d_model=hidden_dim,    # d_modelとして使用
+            n_heads=num_heads,     # n_headsとして使用
+            n_layers=num_layers,   # n_layersとして使用
+            d_ff=hidden_dim * 4,   # d_ffとして使用（一般的な設定）
+            max_len=512,           # デフォルト値
+            dropout=dropout,
             use_pwa_pet=use_pwa_pet,
-            buckets=buckets,
-            use_rope=use_rope,
-            use_pet=use_pet,
+            pwa_buckets=buckets,
             pet_curv_reg=pet_curv_reg,
-            dropout=dropout
+            use_rope=use_rope
         )
         
         logger.info(f"Transformer model created: PWA+PET={use_pwa_pet}, {num_layers} layers")

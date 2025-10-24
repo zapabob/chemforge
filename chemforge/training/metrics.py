@@ -78,7 +78,7 @@ class Metrics:
             # 自動判定
             if self._is_classification_task(predictions, targets):
                 metrics.update(self._calculate_classification_metrics(predictions, targets))
-        else:
+            else:
                 metrics.update(self._calculate_regression_metrics(predictions, targets))
         
         return metrics

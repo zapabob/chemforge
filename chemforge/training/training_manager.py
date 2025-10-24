@@ -21,8 +21,8 @@ warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
 from chemforge.potency.trainer import PotencyTrainer
-from chemforge.potency.loss import MultiTaskLoss
-from chemforge.potency.metrics import MultiTaskMetrics
+from chemforge.potency.loss import PotencyLoss
+from chemforge.potency.metrics import PotencyMetrics
 from chemforge.utils.config_utils import ConfigManager
 from chemforge.utils.logging_utils import Logger
 from chemforge.utils.validation import DataValidator
@@ -281,7 +281,7 @@ class TrainingManager:
         loss_type = self.loss_config.get('type', 'multi_task')
         
         if loss_type == 'multi_task':
-            loss_function = MultiTaskLoss(
+            loss_function = PotencyLoss(
                 regression_loss=self.loss_config.get('regression_loss', 'huber'),
                 classification_loss=self.loss_config.get('classification_loss', 'bce'),
                 uncertainty_weighting=self.loss_config.get('uncertainty_weighting', True),
@@ -297,14 +297,14 @@ class TrainingManager:
         logger.info(f"Created {loss_type} loss function")
         return loss_function
     
-    def _create_metrics_function(self) -> MultiTaskMetrics:
+    def _create_metrics_function(self) -> PotencyMetrics:
         """
         評価指標作成
         
         Returns:
             評価指標
         """
-        metrics_function = MultiTaskMetrics(
+        metrics_function = PotencyMetrics(
             regression_metrics=self.metrics_config.get('regression_metrics', ['rmse', 'mae', 'r2', 'spearman']),
             classification_metrics=self.metrics_config.get('classification_metrics', ['roc_auc', 'pr_auc', 'f1', 'brier', 'ece']),
             temperature_scaling=self.metrics_config.get('temperature_scaling', True)
@@ -315,7 +315,7 @@ class TrainingManager:
     
     def _train_epoch(self, model: nn.Module, train_loader: DataLoader,
                     optimizer: optim.Optimizer, loss_function: nn.Module,
-                    metrics_function: MultiTaskMetrics, scaler: Optional[torch.cuda.amp.GradScaler]) -> Tuple[float, Dict]:
+                    metrics_function: PotencyMetrics, scaler: Optional[torch.cuda.amp.GradScaler]) -> Tuple[float, Dict]:
         """
         1エポック学習
         
@@ -376,7 +376,7 @@ class TrainingManager:
         return avg_loss, avg_metrics
     
     def _validate_epoch(self, model: nn.Module, val_loader: DataLoader,
-                       loss_function: nn.Module, metrics_function: MultiTaskMetrics) -> Tuple[float, Dict]:
+                       loss_function: nn.Module, metrics_function: PotencyMetrics) -> Tuple[float, Dict]:
         """
         1エポック検証
         

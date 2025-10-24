@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
-from chemforge.potency.metrics import MultiTaskMetrics
+from chemforge.potency.metrics import PotencyMetrics
 from chemforge.utils.config_utils import ConfigManager
 from chemforge.utils.logging_utils import Logger
 from chemforge.utils.validation import DataValidator
@@ -241,7 +241,7 @@ class InferenceManager:
         return combined
     
     def evaluate_model(self, model: nn.Module, data_loader: DataLoader,
-                      metrics_function: Optional[MultiTaskMetrics] = None) -> Dict[str, float]:
+                      metrics_function: Optional[PotencyMetrics] = None) -> Dict[str, float]:
         """
         モデル評価
         

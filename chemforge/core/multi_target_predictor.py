@@ -20,7 +20,7 @@ from ..targets import get_chembl_targets, get_target_info
 from ..data.molecular_preprocessor import MolecularPreprocessor
 from ..data.scaffold_detector import ScaffoldDetector
 from ..data.admet_predictor import ADMETPredictor
-from ..training.metrics import PredictionMetrics
+from ..training.metrics import Metrics
 
 
 class MultiTargetPredictor:
@@ -49,7 +49,7 @@ class MultiTargetPredictor:
         self.device = self._get_device(device)
         self.targets = targets or ['DAT', '5HT2A', 'CB1', 'CB2', 'MOR']
         self.chembl_targets = get_chembl_targets()
-        self.metrics = PredictionMetrics()
+        self.metrics = Metrics()
         
         # Initialize molecular preprocessor
         self.molecular_preprocessor = MolecularPreprocessor(

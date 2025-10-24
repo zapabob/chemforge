@@ -19,25 +19,25 @@ from .core.ensemble_model import EnsembleRegressor
 from .data.chembl_loader import ChEMBLLoader
 from .data.molecular_features import MolecularFeatures
 from .data.rdkit_descriptors import RDKitDescriptors
-from .data.smarts_scaffolds import SMARTSScaffolds
+# from .data.smarts_scaffolds import SMARTSScaffolds
 
 # Model imports
-from .models.transformer_regressor import TransformerRegressor
-from .models.gnn_regressor import GNNRegressor
-from .models.ensemble_regressor import EnsembleRegressor
+from .models.transformer import MolecularTransformer
+from .models.gnn_model import GNNRegressor
+from .models.ensemble_model import EnsembleRegressor
 
 # Training imports
 from .training.trainer import Trainer
-from .training.losses import MultiTaskLoss
-from .training.metrics import PredictionMetrics
+# from .training.losses import MultiTaskLoss
+# from .training.metrics import PredictionMetrics
 
 # Optimization imports
-from .optimization.optuna_optimizer import OptunaOptimizer
-from .optimization.hyperparameter_tuning import HyperparameterTuning
+# from .optimization.optuna_optimizer import OptunaOptimizer
+# from .optimization.hyperparameter_tuning import HyperparameterTuning
 
 # Targets imports
 from .targets.chembl_targets import ChEMBLTargets, get_chembl_targets
-from .targets.target_utils import TargetUtils
+# from .targets.target_utils import TargetUtils
 
 # GUI imports
 from .gui.main_window import MainWindow
@@ -59,7 +59,7 @@ from .targets.chembl_targets import CHEMBL_TARGETS, TARGET_CONFIGS
 
 __all__ = [
     # Core
-    'TransformerRegressor',
+    'MolecularTransformer',
     'GNNRegressor',
     'EnsembleRegressor',
     
@@ -67,17 +67,17 @@ __all__ = [
     'ChEMBLLoader',
     'MolecularFeatures',
     'RDKitDescriptors',
-    'SMARTSScaffolds',
+    # 'SMARTSScaffolds',
     
     # Models
-    'TransformerRegressor',
+    'MolecularTransformer',
     'GNNRegressor',
     'EnsembleRegressor',
     
     # Training
     'Trainer',
-    'MultiTaskLoss',
-    'PredictionMetrics',
+    # 'MultiTaskLoss',
+    # 'PredictionMetrics',
     
     # Optimization
     'OptunaOptimizer',

@@ -19,8 +19,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
-from chemforge.core.attention import PWA_PET_Attention
-from chemforge.core.su2 import SU2Gate
+from chemforge.core.pwa_pet_attention import PWA_PET_Attention
+from chemforge.core.su2_gate import SU2Gate
 from chemforge.utils.config_utils import ConfigManager
 from chemforge.utils.logging_utils import Logger
 from chemforge.utils.validation import DataValidator

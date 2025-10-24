@@ -5,13 +5,13 @@ ChemForge Models Module
 Transformer, GNN, Ensembleモデルの統合実装
 """
 
-from .transformer_model import TransformerRegressor
+from .transformer import MolecularTransformer
 from .gnn_model import GNNRegressor
 from .ensemble_model import EnsembleRegressor
 from .model_factory import ModelFactory
 
 __all__ = [
-    "TransformerRegressor",
+    "MolecularTransformer",
     "GNNRegressor", 
     "EnsembleRegressor",
     "ModelFactory"

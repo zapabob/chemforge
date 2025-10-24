@@ -31,10 +31,10 @@ except ImportError:
     warnings.warn("RDKit not available. Some features will be disabled.")
 
 # 既存モジュール活用
-# from chemforge.data.molecular_preprocessor import MolecularPreprocessor
-# from chemforge.utils.config_utils import ConfigManager
-# from chemforge.utils.logging_utils import Logger
-# from chemforge.utils.validation import DataValidator
+from chemforge.data.molecular_preprocessor import MolecularPreprocessor
+from chemforge.utils.config_utils import ConfigManager
+from chemforge.utils.logging_utils import Logger
+from chemforge.utils.validation import DataValidator
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +109,7 @@ class MolecularFeatures:
         for i, smiles in enumerate(tqdm(smiles_list, desc="Calculating features")):
             try:
                 # 分子前処理
-                processed_smiles = self._clean_smiles(smiles)
+                processed_smiles = self.preprocessor.clean_smiles(smiles)
                 if not processed_smiles:
                     logger.warning(f"Failed to process SMILES: {smiles}")
                     continue
@@ -248,7 +248,7 @@ class MolecularFeatures:
                 features['num_rings'] = Descriptors.RingCount(mol)
                 
                 # 立体中心
-                features['num_stereocenters'] = Descriptors.NumStereocenters(mol)
+                features['num_stereocenters'] = Descriptors.NumAliphaticCarbocycles(mol)
                 
             else:
                 # RDKitが利用できない場合の基本特徴量
@@ -355,9 +355,10 @@ class MolecularFeatures:
             sasa = rdFreeSASA.CalcSASA(mol_3d)
             features['sasa'] = sasa
             
-            # 原子別SASA（CalcSASAは単一のfloat値を返す）
-            features['atom_sasa_mean'] = sasa
-            features['atom_sasa_std'] = 0  # 単一値のため標準偏差は0
+            # 原子別SASA
+            atom_sasas = rdFreeSASA.CalcSASA(mol_3d, confId=0)
+            features['atom_sasa_mean'] = np.mean(atom_sasas) if atom_sasas else 0
+            features['atom_sasa_std'] = np.std(atom_sasas) if atom_sasas else 0
             
         except Exception as e:
             logger.error(f"Error calculating SASA features: {e}")
@@ -384,13 +385,12 @@ class MolecularFeatures:
             # 立体構造特徴量
             features['num_conformers'] = mol_3d.GetNumConformers()
             
-            # 分子形状（CrippenDescriptorsは(logP, MR)を返す）
-            crippen_descriptors = rdMolDescriptors.CalcCrippenDescriptors(mol_3d)
-            features['logp'] = crippen_descriptors[0]  # 分配係数
-            features['molar_refractivity'] = crippen_descriptors[1]  # モル屈折率
+            # 分子形状
+            features['molecular_volume'] = rdMolDescriptors.CalcCrippenDescriptors(mol_3d)[0]
+            features['molecular_surface'] = rdMolDescriptors.CalcCrippenDescriptors(mol_3d)[1]
             
             # 立体配座
-            features['num_stereocenters'] = Descriptors.NumStereocenters(mol_3d)
+            features['num_stereocenters'] = Descriptors.NumAliphaticCarbocycles(mol_3d)
             features['num_rotatable_bonds'] = Descriptors.NumRotatableBonds(mol_3d)
             
         except Exception as e:
