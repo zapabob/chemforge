@@ -1,0 +1,112 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.1.0)'
+        required: true
+        default: '0.1.0'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        cache: 'pip'
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+        sudo apt-get install -y libxrender1 libxext6 libgl1-mesa-glx
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install build twine wheel
+    
+    - name: Run tests
+      run: |
+        pytest tests/ -v --cov=chemforge --cov-report=xml --cov-report=html --cov-report=term
+    
+    - name: Run linting
+      run: |
+        flake8 chemforge/ tests/
+        black --check chemforge/ tests/
+        mypy chemforge/
+    
+    - name: Run security scan
+      run: |
+        bandit -r chemforge/ -f json -o bandit-report.json
+        safety check --json --output safety-report.json
+    
+    - name: Build package
+      run: |
+        python -m build
+    
+    - name: Check package
+      run: |
+        twine check dist/*
+    
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        packages-dir: dist/
+        print-hash: true
+        skip-existing: true
+        verify-metadata: true
+        upload-url: https://upload.pypi.org/legacy/
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: pypi-publish
+        name: codecov-umbrella
+        fail_ci_if_error: false
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: dist/
+    
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+    
+    - name: Notify success
+      if: success()
+      run: |
+        echo "✅ Package successfully published to PyPI!"
+        echo "📦 Package: https://pypi.org/project/chemforge/"
+        echo "🔍 Check: https://pypi.org/project/chemforge/0.1.0/"
+    
+    - name: Notify failure
+      if: failure()
+      run: |
+        echo "❌ Package publication failed!"
+        exit 1
