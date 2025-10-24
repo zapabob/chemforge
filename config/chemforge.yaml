@@ -1,0 +1,488 @@
+# ChemForge Configuration for PyPI Distribution
+# 分子設計・ADMET予測・CNS薬物開発のための統合プラットフォーム
+
+# プロジェクト基本情報
+project:
+  name: "chemforge"
+  version: "0.1.0"
+  description: "Molecular Design and ADMET Prediction Platform for CNS Drug Development"
+  long_description: |
+    ChemForge is a comprehensive molecular design and ADMET prediction platform 
+    specifically designed for CNS drug development. It integrates advanced 
+    machine learning models, molecular feature calculation, and scaffold-based 
+    molecular generation to accelerate drug discovery.
+  
+  author: "ChemForge Development Team"
+  author_email: "chemforge@example.com"
+  maintainer: "ChemForge Development Team"
+  maintainer_email: "chemforge@example.com"
+  
+  license: "MIT"
+  license_files: ["LICENSE"]
+  
+  url: "https://github.com/zapabob/chemforge"
+  project_urls:
+    Homepage: "https://github.com/zapabob/chemforge"
+    Documentation: "https://github.com/zapabob/chemforge/docs"
+    Repository: "https://github.com/zapabob/chemforge"
+    Issues: "https://github.com/zapabob/chemforge/issues"
+    Changelog: "https://github.com/zapabob/chemforge/CHANGELOG.md"
+  
+  classifiers:
+    - "Development Status :: 4 - Beta"
+    - "Intended Audience :: Science/Research"
+    - "Intended Audience :: Healthcare Industry"
+    - "Topic :: Scientific/Engineering :: Bio-Informatics"
+    - "Topic :: Scientific/Engineering :: Chemistry"
+    - "Topic :: Scientific/Engineering :: Artificial Intelligence"
+    - "License :: OSI Approved :: MIT License"
+    - "Programming Language :: Python :: 3"
+    - "Programming Language :: Python :: 3.8"
+    - "Programming Language :: Python :: 3.9"
+    - "Programming Language :: Python :: 3.10"
+    - "Programming Language :: Python :: 3.11"
+    - "Programming Language :: Python :: 3.12"
+    - "Operating System :: OS Independent"
+    - "Framework :: Streamlit"
+    - "Framework :: Jupyter"
+  
+  keywords:
+    - "molecular-design"
+    - "admet-prediction"
+    - "drug-discovery"
+    - "cns-drugs"
+    - "machine-learning"
+    - "cheminformatics"
+    - "rdkit"
+    - "transformer"
+    - "neural-networks"
+    - "pharmaceutical"
+    - "bioinformatics"
+    - "chemistry"
+    - "drug-development"
+    - "molecular-properties"
+    - "scaffold-generation"
+    - "toxicity-prediction"
+    - "pharmacokinetics"
+    - "drug-likeness"
+    - "molecular-features"
+    - "cns-scaffolds"
+
+# 依存関係
+dependencies:
+  core:
+    - "numpy>=1.21.0"
+    - "pandas>=1.3.0"
+    - "scikit-learn>=1.0.0"
+    - "torch>=1.9.0"
+    - "transformers>=4.20.0"
+    - "rdkit>=2022.3.0"
+    - "matplotlib>=3.5.0"
+    - "seaborn>=0.11.0"
+    - "plotly>=5.0.0"
+    - "scipy>=1.7.0"
+    - "tqdm>=4.64.0"
+    - "click>=8.0.0"
+    - "pyyaml>=6.0"
+    - "pydantic>=1.10.0"
+    - "requests>=2.28.0"
+    - "urllib3>=1.26.0"
+  
+  gui:
+    - "streamlit>=1.20.0"
+    - "dash>=2.0.0"
+    - "dash-bootstrap-components>=1.0.0"
+    - "plotly-dash>=2.0.0"
+  
+  ml:
+    - "optuna>=3.0.0"
+    - "hyperopt>=0.2.7"
+    - "xgboost>=1.6.0"
+    - "lightgbm>=3.3.0"
+    - "catboost>=1.0.0"
+  
+  data:
+    - "openpyxl>=3.0.0"
+    - "xlrd>=2.0.0"
+    - "h5py>=3.7.0"
+    - "tables>=3.7.0"
+  
+  dev:
+    - "pytest>=7.0.0"
+    - "pytest-cov>=4.0.0"
+    - "black>=22.0.0"
+    - "flake8>=5.0.0"
+    - "mypy>=0.991"
+    - "pre-commit>=2.20.0"
+    - "sphinx>=5.0.0"
+    - "sphinx-rtd-theme>=1.0.0"
+    - "jupyter>=1.0.0"
+    - "ipykernel>=6.0.0"
+    - "notebook>=6.4.0"
+
+# エントリーポイント
+entry_points:
+  console_scripts:
+    - "chemforge = chemforge.cli.main:main"
+    - "chemforge-train = chemforge.cli.train:main"
+    - "chemforge-predict = chemforge.cli.predict:main"
+    - "chemforge-admet = chemforge.cli.admet:main"
+    - "chemforge-generate = chemforge.cli.generate:main"
+    - "chemforge-optimize = chemforge.cli.optimize:main"
+    - "chemforge-chat = chemforge.cli.chat:main"
+  
+  gui_scripts:
+    - "chemforge-gui = chemforge.gui.main_window:main"
+    - "chemforge-streamlit = chemforge.gui.streamlit_app:main"
+    - "chemforge-dash = chemforge.gui.dash_app:main"
+
+# パッケージ設定
+packages:
+  include:
+    - "chemforge"
+    - "chemforge.*"
+    - "config"
+    - "docs"
+    - "examples"
+    - "tests"
+    - "scripts"
+    - "notebooks"
+  
+  exclude:
+    - "*.pyc"
+    - "*.pyo"
+    - "*.pyd"
+    - "__pycache__"
+    - "*.egg-info"
+    - ".git"
+    - ".gitignore"
+    - ".github"
+    - ".vscode"
+    - ".idea"
+    - "*.h5"
+    - "*.hdf5"
+    - "*.pkl"
+    - "*.pickle"
+    - "*.pt"
+    - "*.pth"
+    - "*.ckpt"
+    - "*.tmp"
+    - "*.temp"
+    - "*~"
+    - ".pypirc"
+    - "dist"
+    - "build"
+    - "*.egg-info"
+
+# データファイル
+data_files:
+  - "config/*.yaml"
+  - "config/*.yml"
+  - "docs/*.md"
+  - "docs/*.rst"
+  - "examples/*.py"
+  - "examples/*.ipynb"
+  - "tests/*.py"
+  - "tests/*.yaml"
+  - "tests/*.yml"
+  - "scripts/*.py"
+  - "notebooks/*.ipynb"
+  - "LICENSE"
+  - "README.md"
+  - "CHANGELOG.md"
+  - "CONTRIBUTING.md"
+  - "AUTHORS.md"
+
+# ビルド設定
+build:
+  requires:
+    - "setuptools>=61.0"
+    - "wheel>=0.37.0"
+    - "build>=0.8.0"
+  
+  backend: "setuptools.build_meta"
+  
+  options:
+    setup_requires:
+      - "setuptools>=61.0"
+      - "wheel>=0.37.0"
+    
+    install_requires:
+      - "numpy>=1.21.0"
+      - "pandas>=1.3.0"
+      - "scikit-learn>=1.0.0"
+      - "torch>=1.9.0"
+      - "transformers>=4.20.0"
+      - "rdkit>=2022.3.0"
+      - "matplotlib>=3.5.0"
+      - "seaborn>=0.11.0"
+      - "plotly>=5.0.0"
+      - "scipy>=1.7.0"
+      - "tqdm>=4.64.0"
+      - "click>=8.0.0"
+      - "pyyaml>=6.0"
+      - "pydantic>=1.10.0"
+      - "requests>=2.28.0"
+      - "urllib3>=1.26.0"
+      - "streamlit>=1.20.0"
+      - "dash>=2.0.0"
+      - "dash-bootstrap-components>=1.0.0"
+      - "plotly-dash>=2.0.0"
+    
+    extras_require:
+      ml:
+        - "optuna>=3.0.0"
+        - "hyperopt>=0.2.7"
+        - "xgboost>=1.6.0"
+        - "lightgbm>=3.3.0"
+        - "catboost>=1.0.0"
+      
+      data:
+        - "openpyxl>=3.0.0"
+        - "xlrd>=2.0.0"
+        - "h5py>=3.7.0"
+        - "tables>=3.7.0"
+      
+      dev:
+        - "pytest>=7.0.0"
+        - "pytest-cov>=4.0.0"
+        - "black>=22.0.0"
+        - "flake8>=5.0.0"
+        - "mypy>=0.991"
+        - "pre-commit>=2.20.0"
+        - "sphinx>=5.0.0"
+        - "sphinx-rtd-theme>=1.0.0"
+        - "jupyter>=1.0.0"
+        - "ipykernel>=6.0.0"
+        - "notebook>=6.4.0"
+      
+      all:
+        - "optuna>=3.0.0"
+        - "hyperopt>=0.2.7"
+        - "xgboost>=1.6.0"
+        - "lightgbm>=3.3.0"
+        - "catboost>=1.0.0"
+        - "openpyxl>=3.0.0"
+        - "xlrd>=2.0.0"
+        - "h5py>=3.7.0"
+        - "tables>=3.7.0"
+        - "pytest>=7.0.0"
+        - "pytest-cov>=4.0.0"
+        - "black>=22.0.0"
+        - "flake8>=5.0.0"
+        - "mypy>=0.991"
+        - "pre-commit>=2.20.0"
+        - "sphinx>=5.0.0"
+        - "sphinx-rtd-theme>=1.0.0"
+        - "jupyter>=1.0.0"
+        - "ipykernel>=6.0.0"
+        - "notebook>=6.4.0"
+
+# テスト設定
+test:
+  requires:
+    - "pytest>=7.0.0"
+    - "pytest-cov>=4.0.0"
+    - "pytest-mock>=3.8.0"
+    - "pytest-xdist>=2.5.0"
+  
+  commands:
+    - "pytest tests/ -v --cov=chemforge --cov-report=html --cov-report=term"
+    - "pytest tests/ -v --cov=chemforge --cov-report=xml"
+  
+  coverage:
+    threshold: 80
+    report:
+      - "html"
+      - "xml"
+      - "term"
+
+# ドキュメント設定
+docs:
+  requires:
+    - "sphinx>=5.0.0"
+    - "sphinx-rtd-theme>=1.0.0"
+    - "sphinx-autodoc-typehints>=1.19.0"
+    - "myst-parser>=0.18.0"
+  
+  source_dir: "docs"
+  build_dir: "docs/_build"
+  format: "html"
+  
+  extensions:
+    - "sphinx.ext.autodoc"
+    - "sphinx.ext.napoleon"
+    - "sphinx.ext.viewcode"
+    - "sphinx.ext.intersphinx"
+    - "sphinx.ext.todo"
+    - "sphinx.ext.coverage"
+    - "sphinx.ext.mathjax"
+    - "sphinx.ext.githubpages"
+    - "sphinx_rtd_theme"
+    - "myst_parser"
+
+# リリース設定
+release:
+  version: "0.1.0"
+  date: "2025-01-25"
+  changelog: "CHANGELOG.md"
+  
+  notes:
+    - "Initial release of ChemForge"
+    - "Molecular design and ADMET prediction platform"
+    - "CNS drug development support"
+    - "Scaffold-based molecular generation"
+    - "Transformer-based models"
+    - "Streamlit GUI interface"
+    - "CLI tools for training and prediction"
+    - "Comprehensive test suite"
+    - "Documentation and examples"
+
+# 品質設定
+quality:
+  code_style: "black"
+  linting: "flake8"
+  type_checking: "mypy"
+  formatting: "black"
+  
+  pre_commit:
+    - "black"
+    - "flake8"
+    - "mypy"
+    - "pytest"
+    - "pre-commit-hooks"
+
+# セキュリティ設定
+security:
+  secret_scanning: true
+  dependency_checking: true
+  license_checking: true
+  
+  excluded_files:
+    - ".pypirc"
+    - "*.key"
+    - "*.pem"
+    - "*.p12"
+    - "*.pfx"
+    - "secrets.yaml"
+    - "secrets.yml"
+    - "*.env"
+    - ".env*"
+
+# パフォーマンス設定
+performance:
+  memory_limit: "8GB"
+  cpu_limit: "4"
+  timeout: 300
+  
+  optimization:
+    - "numpy"
+    - "pandas"
+    - "torch"
+    - "rdkit"
+  
+  profiling:
+    - "cProfile"
+    - "memory_profiler"
+    - "line_profiler"
+
+# ログ設定
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  handlers:
+    - "console"
+    - "file"
+    - "rotating_file"
+  
+  files:
+    - "logs/chemforge.log"
+    - "logs/error.log"
+    - "logs/debug.log"
+  
+  rotation:
+    max_bytes: 10485760  # 10MB
+    backup_count: 5
+
+# 設定ファイルの検証
+validation:
+  schema: "config/schema.yaml"
+  strict: true
+  
+  required_fields:
+    - "project.name"
+    - "project.version"
+    - "project.description"
+    - "dependencies.core"
+    - "entry_points.console_scripts"
+  
+  optional_fields:
+    - "project.url"
+    - "project.project_urls"
+    - "dependencies.gui"
+    - "dependencies.ml"
+    - "dependencies.data"
+    - "dependencies.dev"
+    - "build.options"
+    - "test.requires"
+    - "docs.requires"
+    - "quality.code_style"
+    - "security.secret_scanning"
+    - "performance.memory_limit"
+    - "logging.level"
+
+# メタデータ
+metadata:
+  created: "2025-01-25"
+  updated: "2025-01-25"
+  author: "ChemForge Development Team"
+  maintainer: "ChemForge Development Team"
+  license: "MIT"
+  status: "active"
+  version: "0.1.0"
+  
+  tags:
+    - "molecular-design"
+    - "admet-prediction"
+    - "drug-discovery"
+    - "cns-drugs"
+    - "machine-learning"
+    - "cheminformatics"
+    - "rdkit"
+    - "transformer"
+    - "neural-networks"
+    - "pharmaceutical"
+    - "bioinformatics"
+    - "chemistry"
+    - "drug-development"
+    - "molecular-properties"
+    - "scaffold-generation"
+    - "toxicity-prediction"
+    - "pharmacokinetics"
+    - "drug-likeness"
+    - "molecular-features"
+    - "cns-scaffolds"
+  
+  categories:
+    - "Scientific/Engineering"
+    - "Bio-Informatics"
+    - "Chemistry"
+    - "Artificial Intelligence"
+    - "Machine Learning"
+    - "Drug Discovery"
+    - "Pharmaceutical"
+    - "Cheminformatics"
+    - "Molecular Design"
+    - "ADMET Prediction"
+    - "CNS Drug Development"
+    - "Scaffold Generation"
+    - "Transformer Models"
+    - "Neural Networks"
+    - "Deep Learning"
+    - "Molecular Properties"
+    - "Toxicity Prediction"
+    - "Pharmacokinetics"
+    - "Drug Likeness"
+    - "Molecular Features"
+    - "CNS Scaffolds"
