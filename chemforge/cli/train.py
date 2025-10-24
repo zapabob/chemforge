@@ -14,9 +14,9 @@ from typing import Dict, Any, Optional, List
 import warnings
 warnings.filterwarnings('ignore')
 
-from chemforge.potency.data_processor import DataProcessor
-from chemforge.potency.featurizer import MolecularFeaturizer
-from chemforge.potency.potency_model import PotencyPredictor
+from chemforge.potency.data_processor import PotencyDataProcessor
+from chemforge.potency.featurizer import PotencyFeaturizer
+from chemforge.potency.potency_model import PotencyPWAPETModel
 from chemforge.potency.trainer import PotencyTrainer
 from chemforge.potency.metrics import PotencyMetrics
 from chemforge.utils.external_apis import ExternalAPIManager
@@ -40,7 +40,7 @@ def load_config(config_path: str) -> Dict[str, Any]:
         print(f"[ERROR] 設定読み込み失敗: {e}")
         return {}
 
-def setup_data_processor(config: Dict[str, Any]) -> DataProcessor:
+def setup_data_processor(config: Dict[str, Any]) -> PotencyDataProcessor:
     """
     データプロセッサー設定
     
@@ -65,7 +65,7 @@ def setup_data_processor(config: Dict[str, Any]) -> DataProcessor:
     print("[INFO] データプロセッサー設定完了")
     return processor
 
-def setup_featurizer(config: Dict[str, Any]) -> MolecularFeaturizer:
+def setup_featurizer(config: Dict[str, Any]) -> PotencyFeaturizer:
     """
     フィーチャライザー設定
     
@@ -89,7 +89,7 @@ def setup_featurizer(config: Dict[str, Any]) -> MolecularFeaturizer:
     print("[INFO] フィーチャライザー設定完了")
     return featurizer
 
-def setup_model(config: Dict[str, Any]) -> PotencyPredictor:
+def setup_model(config: Dict[str, Any]) -> PotencyPWAPETModel:
     """
     モデル設定
     
@@ -117,7 +117,7 @@ def setup_model(config: Dict[str, Any]) -> PotencyPredictor:
     print("[INFO] モデル設定完了")
     return model
 
-def setup_trainer(config: Dict[str, Any], model: PotencyPredictor) -> PotencyTrainer:
+def setup_trainer(config: Dict[str, Any], model: PotencyPWAPETModel) -> PotencyTrainer:
     """
     トレーナー設定
     

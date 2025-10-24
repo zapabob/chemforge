@@ -2,7 +2,7 @@
 Graph Neural Network Module
 
 GNN深層学習モデル実装
-既存GraphNeuralNetworkを活用した効率的なGNN実装
+既存GNNRegressorを活用した効率的なGNN実装
 """
 
 import torch
@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
-from chemforge.core.graph_neural_network import GraphNeuralNetwork
+from chemforge.core.gnn_model import GNNRegressor
 from chemforge.utils.config_utils import ConfigManager
 from chemforge.utils.logging_utils import Logger
 from chemforge.utils.validation import DataValidator
@@ -30,7 +30,7 @@ class GCNLayer(nn.Module):
     """
     Graph Convolutional Network Layer
     
-    既存GraphNeuralNetworkを活用したGCN Layer
+    既存GNNRegressorを活用したGCN Layer
     """
     
     def __init__(self, in_features: int, out_features: int, 
@@ -119,7 +119,7 @@ class GATLayer(nn.Module):
     """
     Graph Attention Network Layer
     
-    既存GraphNeuralNetworkを活用したGAT Layer
+    既存GNNRegressorを活用したGAT Layer
     """
     
     def __init__(self, in_features: int, out_features: int, 
@@ -225,7 +225,7 @@ class GraphSAGELayer(nn.Module):
     """
     GraphSAGE Layer
     
-    既存GraphNeuralNetworkを活用したGraphSAGE Layer
+    既存GNNRegressorを活用したGraphSAGE Layer
     """
     
     def __init__(self, in_features: int, out_features: int,

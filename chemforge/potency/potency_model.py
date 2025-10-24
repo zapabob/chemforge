@@ -13,7 +13,7 @@ from typing import Dict, List, Tuple, Optional, Union, Any
 import math
 
 # 既存のPWA+PETモジュールをインポート
-from ..core.transformer_model import PWAPETEncoderLayer, PWAPETTransformer
+from ..core.transformer_model import PhaseEnrichedTransformerLayer, TransformerRegressor
 from ..core.pwa_pet_attention import PWA_PET_Attention
 from ..core.su2_gate import SU2Gate
 

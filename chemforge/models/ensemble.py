@@ -2,7 +2,7 @@
 Ensemble Model Module
 
 Ensemble深層学習モデル実装
-既存EnsembleModelを活用した効率的なEnsemble実装
+既存EnsembleRegressorを活用した効率的なEnsemble実装
 """
 
 import torch
@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
-from chemforge.core.ensemble_model import EnsembleModel
+from chemforge.core.ensemble_model import EnsembleRegressor
 from chemforge.models.transformer import PotencyTransformer
 from chemforge.models.gnn import PotencyGNN
 from chemforge.utils.config_utils import ConfigManager

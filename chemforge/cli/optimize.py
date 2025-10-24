@@ -15,7 +15,7 @@ from typing import Dict, Any, Optional, List, Union, Tuple
 import warnings
 warnings.filterwarnings('ignore')
 
-from chemforge.potency.featurizer import MolecularFeaturizer
+from chemforge.potency.featurizer import PotencyFeaturizer
 from chemforge.utils.external_apis import ExternalAPIManager
 
 class MolecularOptimizer:

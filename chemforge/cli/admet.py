@@ -17,7 +17,7 @@ warnings.filterwarnings('ignore')
 
 from chemforge.utils.external_apis import ExternalAPIManager
 from chemforge.utils.web_scraper import SwissADMEScraper
-from chemforge.potency.featurizer import MolecularFeaturizer
+from chemforge.potency.featurizer import PotencyFeaturizer
 
 class ADMETPredictor:
     """ADMET予測クラス"""

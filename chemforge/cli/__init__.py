@@ -5,17 +5,17 @@ This module provides command-line interface for ChemForge library.
 """
 
 from .main import main
-from .train import train_command
-from .predict import predict_command
-from .admet import admet_command
-from .generate import generate_command
-from .optimize import optimize_command
+from .train import main as train_main
+from .predict import main as predict_main
+from .admet import main as admet_main
+from .generate import main as generate_main
+from .optimize import main as optimize_main
 
 __all__ = [
     "main",
-    "train_command",
-    "predict_command", 
-    "admet_command",
-    "generate_command",
-    "optimize_command"
+    "train_main",
+    "predict_main", 
+    "admet_main",
+    "generate_main",
+    "optimize_main"
 ]

@@ -7,14 +7,14 @@ ADMET予測モジュール
 
 from .admet_predictor import ADMETPredictor
 from .physicochemical_predictor import PhysicochemicalPredictor
-from .pharmacokinetic_predictor import PharmacokineticPredictor
+# from .pharmacokinetic_predictor import PharmacokineticPredictor  # ファイルが存在しない
 from .toxicity_predictor import ToxicityPredictor
-from .druglikeness_predictor import DruglikenessPredictor
+from .drug_likeness import DrugLikenessPredictor as DruglikenessPredictor
 
 __all__ = [
     'ADMETPredictor',
     'PhysicochemicalPredictor',
-    'PharmacokineticPredictor',
+    # 'PharmacokineticPredictor',  # ファイルが存在しない
     'ToxicityPredictor',
     'DruglikenessPredictor'
 ]

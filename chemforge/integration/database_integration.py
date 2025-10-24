@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 既存モジュール活用
-from chemforge.utilities.database_manager import DatabaseManager
+from chemforge.utils.database import DatabaseManager
 from chemforge.data.chembl_loader import ChEMBLLoader
 from chemforge.data.molecular_features import MolecularFeatures
 from chemforge.data.rdkit_descriptors import RDKitDescriptors

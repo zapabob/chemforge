@@ -15,9 +15,9 @@ from typing import Dict, Any, Optional, List, Union
 import warnings
 warnings.filterwarnings('ignore')
 
-from chemforge.potency.data_processor import DataProcessor
-from chemforge.potency.featurizer import MolecularFeaturizer
-from chemforge.potency.potency_model import PotencyPredictor
+from chemforge.potency.data_processor import PotencyDataProcessor
+from chemforge.potency.featurizer import PotencyFeaturizer
+from chemforge.potency.potency_model import PotencyPWAPETModel
 from chemforge.potency.trainer import PotencyTrainer
 from chemforge.potency.metrics import PotencyMetrics
 from chemforge.utils.external_apis import ExternalAPIManager
@@ -220,7 +220,7 @@ def predict_admet(smiles_list: List[str], output_path: str):
                     'muegge': drug_likeness.get('muegge')
                 })
             else:
-                processed_result[processed_result['error'] = result.get('error', 'Unknown error')
+                processed_result['error'] = result.get('error', 'Unknown error')
             
             processed_results.append(processed_result)
         

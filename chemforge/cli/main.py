@@ -9,11 +9,11 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .train import train_command
-from .predict import predict_command
-from .admet import admet_command
-from .generate import generate_command
-from .optimize import optimize_command
+from .train import main as train_main
+from .predict import main as predict_main
+from .admet import main as admet_main
+from .generate import main as generate_main
+from .optimize import main as optimize_main
 
 
 @click.group()
@@ -74,11 +74,11 @@ def main(
 
 
 # Add subcommands
-main.add_command(train_command)
-main.add_command(predict_command)
-main.add_command(admet_command)
-main.add_command(generate_command)
-main.add_command(optimize_command)
+main.add_command(train_main, name="train")
+main.add_command(predict_main, name="predict")
+main.add_command(admet_main, name="admet")
+main.add_command(generate_main, name="generate")
+main.add_command(optimize_main, name="optimize")
 
 
 if __name__ == "__main__":

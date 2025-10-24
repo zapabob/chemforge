@@ -32,6 +32,139 @@ class PropertyPredictor:
         """分子物性予測器を初期化"""
         logger.info("PropertyPredictor initialized")
     
+    def predict_tox21_endpoints(self, smiles: str) -> Dict[str, float]:
+        """
+        Tox21エンドポイント予測
+        
+        Args:
+            smiles: SMILES文字列
+        
+        Returns:
+            Tox21エンドポイント予測結果
+        """
+        try:
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                logger.warning(f"Invalid SMILES: {smiles}")
+                return {}
+            
+            # Tox21エンドポイント（簡易的なRDKit記述子ベース予測）
+            tox21_predictions = {
+                # Nuclear Receptor (NR) assays
+                'NR-AR': self._predict_nr_ar(mol),
+                'NR-AR-LBD': self._predict_nr_ar_lbd(mol),
+                'NR-AhR': self._predict_nr_ahr(mol),
+                'NR-Aromatase': self._predict_nr_aromatase(mol),
+                'NR-ER': self._predict_nr_er(mol),
+                'NR-ER-LBD': self._predict_nr_er_lbd(mol),
+                'NR-PPAR-gamma': self._predict_nr_ppar_gamma(mol),
+                
+                # Stress Response (SR) assays
+                'SR-ARE': self._predict_sr_are(mol),
+                'SR-ATAD5': self._predict_sr_atad5(mol),
+                'SR-HSE': self._predict_sr_hse(mol),
+                'SR-MMP': self._predict_sr_mmp(mol),
+                'SR-p53': self._predict_sr_p53(mol)
+            }
+            
+            return tox21_predictions
+            
+        except Exception as e:
+            logger.error(f"Error predicting Tox21 endpoints: {e}")
+            return {}
+    
+    def _predict_nr_ar(self, mol) -> float:
+        """Androgen Receptor予測"""
+        # 簡易的なRDKit記述子ベース予測
+        mw = Descriptors.MolWt(mol)
+        logp = Crippen.MolLogP(mol)
+        tpsa = Descriptors.TPSA(mol)
+        
+        # ステロイド様構造の簡易判定
+        steroid_score = 0.0
+        if mw > 200 and mw < 400 and logp > 2.0:
+            steroid_score = 0.3
+        
+        return min(1.0, max(0.0, steroid_score))
+    
+    def _predict_nr_ar_lbd(self, mol) -> float:
+        """Androgen Receptor LBD予測"""
+        return self._predict_nr_ar(mol) * 0.8
+    
+    def _predict_nr_ahr(self, mol) -> float:
+        """Aryl Hydrocarbon Receptor予測"""
+        # 芳香族環の数に基づく簡易予測
+        aromatic_rings = Descriptors.NumAromaticRings(mol)
+        return min(1.0, aromatic_rings * 0.2)
+    
+    def _predict_nr_aromatase(self, mol) -> float:
+        """Aromatase予測"""
+        # ステロイド様構造の簡易判定
+        return self._predict_nr_ar(mol) * 0.6
+    
+    def _predict_nr_er(self, mol) -> float:
+        """Estrogen Receptor予測"""
+        # フェノール基の存在チェック
+        phenol_score = 0.0
+        for atom in mol.GetAtoms():
+            if atom.GetSymbol() == 'O' and atom.GetDegree() == 1:
+                for neighbor in atom.GetNeighbors():
+                    if neighbor.GetSymbol() == 'C' and neighbor.GetIsAromatic():
+                        phenol_score = 0.4
+                        break
+        
+        return min(1.0, phenol_score)
+    
+    def _predict_nr_er_lbd(self, mol) -> float:
+        """Estrogen Receptor LBD予測"""
+        return self._predict_nr_er(mol) * 0.9
+    
+    def _predict_nr_ppar_gamma(self, mol) -> float:
+        """PPAR-gamma予測"""
+        # カルボン酸基の存在チェック
+        carboxyl_score = 0.0
+        for atom in mol.GetAtoms():
+            if atom.GetSymbol() == 'C':
+                for neighbor in atom.GetNeighbors():
+                    if neighbor.GetSymbol() == 'O' and neighbor.GetDegree() == 1:
+                        carboxyl_score = 0.3
+                        break
+        
+        return min(1.0, carboxyl_score)
+    
+    def _predict_sr_are(self, mol) -> float:
+        """Antioxidant Response Element予測"""
+        # チオール基の存在チェック
+        thiol_score = 0.0
+        for atom in mol.GetAtoms():
+            if atom.GetSymbol() == 'S' and atom.GetDegree() == 1:
+                thiol_score = 0.5
+                break
+        
+        return min(1.0, thiol_score)
+    
+    def _predict_sr_atad5(self, mol) -> float:
+        """ATAD5予測"""
+        # DNA損傷関連の簡易予測
+        mw = Descriptors.MolWt(mol)
+        return min(1.0, max(0.0, (mw - 100) / 500))
+    
+    def _predict_sr_hse(self, mol) -> float:
+        """Heat Shock Element予測"""
+        # 熱ショック応答関連の簡易予測
+        return self._predict_sr_atad5(mol) * 0.7
+    
+    def _predict_sr_mmp(self, mol) -> float:
+        """Mitochondrial Membrane Potential予測"""
+        # ミトコンドリア毒性の簡易予測
+        logp = Crippen.MolLogP(mol)
+        return min(1.0, max(0.0, (logp - 2.0) / 3.0))
+    
+    def _predict_sr_p53(self, mol) -> float:
+        """p53予測"""
+        # p53経路活性化の簡易予測
+        return self._predict_sr_atad5(mol) * 0.8
+
     def predict_physicochemical_properties(self, smiles: str) -> Dict[str, float]:
         """
         物理化学的性質を予測

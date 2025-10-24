@@ -7,12 +7,12 @@ Integration and Utilities Module
 
 from .database_integration import DatabaseIntegration
 from .visualization_manager import VisualizationManager
-from .utility_manager import UtilityManager
-from .workflow_manager import WorkflowManager
+# from .utility_manager import UtilityManager  # ファイルが存在しない
+# from .workflow_manager import WorkflowManager  # ファイルが存在しない
 
 __all__ = [
     'DatabaseIntegration',
     'VisualizationManager',
-    'UtilityManager',
-    'WorkflowManager'
+    # 'UtilityManager',  # ファイルが存在しない
+    # 'WorkflowManager'  # ファイルが存在しない
 ]
