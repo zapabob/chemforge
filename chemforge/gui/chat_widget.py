@@ -37,9 +37,10 @@ class ChatWidget:
     
     def initialize_chat_history(self):
         """チャット履歴初期化"""
-        if 'chat_history' not in st.session_state:
+        # セッション状態の初期化を安全に行う
+        if not hasattr(st.session_state, 'chat_history'):
             st.session_state.chat_history = []
-        if 'current_conversation' not in st.session_state:
+        if not hasattr(st.session_state, 'current_conversation'):
             st.session_state.current_conversation = []
     
     def render_chat_interface(self):

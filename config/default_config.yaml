@@ -1,0 +1,209 @@
+# ChemForge デフォルト設定ファイル
+
+# 分子特徴量計算設定
+molecular_features:
+  # 基本記述子
+  basic_descriptors:
+    - molecular_weight
+    - logp
+    - tpsa
+    - num_atoms
+    - num_bonds
+    - num_rings
+    - num_aromatic_rings
+    - num_heteroatoms
+    - num_rotatable_bonds
+    - num_stereocenters
+  
+  # 3D記述子
+  three_d_descriptors:
+    - sasa
+    - atom_sasa_mean
+    - atom_sasa_std
+    - molecular_volume
+    - molecular_surface
+  
+  # 計算設定
+  calculation_settings:
+    use_3d: true
+    max_conformers: 10
+    sasa_probe_radius: 1.4
+    sasa_n_points: 960
+
+# モデル設定
+model:
+  # Transformer設定
+  transformer:
+    vocab_size: 1000
+    d_model: 512
+    n_heads: 8
+    n_layers: 6
+    d_ff: 2048
+    max_len: 512
+    dropout: 0.1
+    use_pwa_pet: true
+    pwa_buckets:
+      trivial: 2
+      fund: 4
+      adj: 2
+    pet_curv_reg: 0.01
+    use_rope: true
+  
+  # GNN設定
+  gnn:
+    hidden_dim: 128
+    num_layers: 3
+    dropout: 0.1
+    activation: "relu"
+  
+  # アンサンブル設定
+  ensemble:
+    n_estimators: 10
+    max_depth: 10
+    random_state: 42
+
+# 訓練設定
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  num_epochs: 100
+  early_stopping_patience: 10
+  validation_split: 0.2
+  optimizer: "adam"
+  scheduler: "cosine"
+  
+  # 損失関数
+  loss_functions:
+    regression: "mse"
+    classification: "cross_entropy"
+    multi_task: "weighted_sum"
+  
+  # メトリクス
+  metrics:
+    - "mae"
+    - "mse"
+    - "r2"
+    - "accuracy"
+    - "f1"
+
+# データ設定
+data:
+  # データソース
+  sources:
+    - "chembl"
+    - "pubchem"
+    - "zinc"
+  
+  # 前処理
+  preprocessing:
+    remove_duplicates: true
+    filter_by_activity: true
+    min_activity_value: 5.0
+    max_activity_value: 10.0
+  
+  # 特徴量
+  features:
+    molecular_descriptors: true
+    fingerprints: true
+    graph_features: true
+    cns_scaffolds: true
+
+# ADMET設定
+admet:
+  # 物理化学的性質
+  physicochemical:
+    molecular_weight_range: [100, 1000]
+    logp_range: [-2, 5]
+    tpsa_range: [0, 200]
+    hbd_range: [0, 5]
+    hba_range: [0, 10]
+  
+  # 毒性予測
+  toxicity:
+    tox21_endpoints:
+      - "NR-AR"
+      - "NR-AR-LBD"
+      - "NR-AhR"
+      - "NR-Aromatase"
+      - "NR-ER"
+      - "NR-ER-LBD"
+      - "NR-PPAR-gamma"
+      - "SR-ARE"
+      - "SR-ATAD5"
+      - "SR-HSE"
+      - "SR-MMP"
+      - "SR-p53"
+  
+  # 薬物動態
+  pharmacokinetics:
+    absorption: true
+    distribution: true
+    metabolism: true
+    excretion: true
+
+# CNS骨格設定
+cns_scaffolds:
+  # 骨格タイプ
+  scaffold_types:
+    - "phenethylamine"
+    - "tryptamine"
+    - "cannabinoid"
+    - "opioid"
+    - "anti_nmda"
+    - "gaba_agonist"
+  
+  # 安全性設定
+  safety:
+    check_drug_likeness: true
+    check_toxicity: true
+    check_safety_warnings: true
+  
+  # 生成設定
+  generation:
+    max_analogs: 100
+    modification_types:
+      - "substitution"
+      - "addition"
+      - "removal"
+    optimization_targets:
+      - "molecular_weight"
+      - "logp"
+      - "tpsa"
+
+# GUI設定
+gui:
+  # Streamlit設定
+  streamlit:
+    page_title: "ChemForge: 分子設計プラットフォーム"
+    page_icon: "🔬"
+    layout: "wide"
+    initial_sidebar_state: "expanded"
+  
+  # 可視化設定
+  visualization:
+    default_molecule_size: 300
+    default_color_scheme: "default"
+    show_atom_labels: false
+    show_bond_labels: false
+  
+  # チャット設定
+  chat:
+    max_history: 100
+    response_timeout: 30
+    enable_suggestions: true
+
+# ログ設定
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "chemforge.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# パス設定
+paths:
+  data_dir: "data"
+  models_dir: "models"
+  results_dir: "results"
+  logs_dir: "logs"
+  config_dir: "config"

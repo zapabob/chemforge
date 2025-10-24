@@ -28,10 +28,18 @@ class TestPredictionWidget(unittest.TestCase):
     def test_predict_cns_targets(self, mock_st):
         """CNSターゲット予測のテスト"""
         # Streamlitのモック設定
-        mock_st.columns.return_value = [Mock(), Mock()]
+        mock_col1 = Mock()
+        mock_col2 = Mock()
+        mock_st.columns.return_value = [mock_col1, mock_col2]
         mock_st.write.return_value = None
         mock_st.metric.return_value = None
         mock_st.plotly_chart.return_value = None
+        
+        # コンテキストマネージャーのモック
+        mock_col1.__enter__ = Mock(return_value=mock_col1)
+        mock_col1.__exit__ = Mock(return_value=None)
+        mock_col2.__enter__ = Mock(return_value=mock_col2)
+        mock_col2.__exit__ = Mock(return_value=None)
         
         results = self.widget.predict_cns_targets(self.test_smiles)
         
@@ -54,10 +62,21 @@ class TestPredictionWidget(unittest.TestCase):
     def test_predict_admet_properties(self, mock_st):
         """ADMET特性予測のテスト"""
         # Streamlitのモック設定
-        mock_st.columns.return_value = [Mock(), Mock(), Mock()]
+        mock_col1 = Mock()
+        mock_col2 = Mock()
+        mock_col3 = Mock()
+        mock_st.columns.return_value = [mock_col1, mock_col2, mock_col3]
         mock_st.write.return_value = None
         mock_st.metric.return_value = None
         mock_st.plotly_chart.return_value = None
+        
+        # コンテキストマネージャーのモック
+        mock_col1.__enter__ = Mock(return_value=mock_col1)
+        mock_col1.__exit__ = Mock(return_value=None)
+        mock_col2.__enter__ = Mock(return_value=mock_col2)
+        mock_col2.__exit__ = Mock(return_value=None)
+        mock_col3.__enter__ = Mock(return_value=mock_col3)
+        mock_col3.__exit__ = Mock(return_value=None)
         
         results = self.widget.predict_admet_properties(self.test_smiles)
         
@@ -132,17 +151,17 @@ class TestChatWidget(unittest.TestCase):
         self.assertIsNotNone(self.widget.generator)
         self.assertIsNotNone(self.widget.property_predictor)
     
-    def test_initialize_chat_history(self):
+    @patch('chemforge.gui.chat_widget.st')
+    def test_initialize_chat_history(self, mock_st):
         """チャット履歴初期化のテスト"""
         # セッション状態のモック
-        with patch('chemforge.gui.chat_widget.st') as mock_st:
-            mock_st.session_state = {}
-            
-            self.widget.initialize_chat_history()
-            
-            # セッション状態が初期化されることを確認
-            self.assertIn('chat_history', mock_st.session_state)
-            self.assertIn('current_conversation', mock_st.session_state)
+        mock_st.session_state = type('MockSessionState', (), {})()
+        
+        self.widget.initialize_chat_history()
+        
+        # セッション状態が初期化されることを確認
+        self.assertTrue(hasattr(mock_st.session_state, 'chat_history'))
+        self.assertTrue(hasattr(mock_st.session_state, 'current_conversation'))
     
     def test_generate_assistant_response_text(self):
         """テキスト入力でのアシスタント応答生成のテスト"""

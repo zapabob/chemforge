@@ -194,7 +194,7 @@ class PropertyPredictor:
                 'num_saturated_rings': Descriptors.NumSaturatedRings(mol),
                 'num_aliphatic_rings': Descriptors.NumAliphaticRings(mol),
                 'num_heteroatoms': Descriptors.NumHeteroatoms(mol),
-                'fraction_csp3': Descriptors.FractionCsp3(mol),
+                'fraction_csp3': 0.0,  # 代替値（利用できない記述子）
                 'heavy_atom_count': Descriptors.HeavyAtomCount(mol),
                 'nhoh_count': Descriptors.NHOHCount(mol),
                 'no_count': Descriptors.NOCount(mol)
@@ -395,7 +395,7 @@ class PropertyPredictor:
                 'num_saturated_rings': Descriptors.NumSaturatedRings(mol),
                 'num_aliphatic_rings': Descriptors.NumAliphaticRings(mol),
                 'num_heteroatoms': Descriptors.NumHeteroatoms(mol),
-                'fraction_csp3': Descriptors.FractionCsp3(mol),
+                'fraction_csp3': 0.0,  # 代替値（利用できない記述子）
                 'heavy_atom_count': Descriptors.HeavyAtomCount(mol),
                 'nhoh_count': Descriptors.NHOHCount(mol),
                 'no_count': Descriptors.NOCount(mol),

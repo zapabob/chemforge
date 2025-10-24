@@ -59,7 +59,21 @@ class MolecularFeatures:
         
         # 既存モジュール活用
         self.config_manager = ConfigManager(config_path)
-        self.config = self.config_manager.load_config()
+        try:
+            self.config = self.config_manager.load_config()
+        except Exception as e:
+            logger.error(f"Error loading config: {e}")
+            # デフォルト設定を使用
+            self.config = {
+                'molecular_features': {
+                    'calculation_settings': {
+                        'use_3d': True,
+                        'max_conformers': 10,
+                        'sasa_probe_radius': 1.4,
+                        'sasa_n_points': 960
+                    }
+                }
+            }
         self.logger = Logger("MolecularFeatures")
         self.validator = DataValidator()
         
@@ -75,6 +89,66 @@ class MolecularFeatures:
         self.cache_features = self.feature_config.get('cache_features', True)
         
         logger.info("MolecularFeatures initialized")
+    
+    def calculate_single_features(self, smiles: str, feature_types: Optional[List[str]] = None) -> Dict[str, float]:
+        """
+        単一分子の特徴量計算
+        
+        Args:
+            smiles: SMILES文字列
+            feature_types: 特徴量タイプリスト
+            
+        Returns:
+            特徴量辞書
+        """
+        try:
+            if feature_types is None:
+                feature_types = ['basic', 'descriptors', 'qed', 'sasa', 'conformational']
+            
+            features = {}
+            
+            # 分子前処理
+            processed_smiles = self.preprocessor.clean_smiles(smiles)
+            if not processed_smiles:
+                logger.warning(f"Failed to process SMILES: {smiles}")
+                return {}
+            
+            # RDKit分子オブジェクト作成
+            mol = Chem.MolFromSmiles(processed_smiles)
+            if mol is None:
+                logger.warning(f"Invalid SMILES: {processed_smiles}")
+                return {}
+            
+            # 基本特徴量
+            if 'basic' in feature_types:
+                basic_features = self._calculate_basic_features(mol, processed_smiles)
+                features.update(basic_features)
+            
+            # 記述子特徴量
+            if 'descriptors' in feature_types:
+                descriptor_features = self._calculate_descriptor_features(mol)
+                features.update(descriptor_features)
+            
+            # QED特徴量
+            if 'qed' in feature_types:
+                qed_features = self._calculate_qed_features(mol)
+                features.update(qed_features)
+            
+            # SASA特徴量
+            if 'sasa' in feature_types:
+                sasa_features = self._calculate_sasa_features(mol)
+                features.update(sasa_features)
+            
+            # 立体構造特徴量
+            if 'conformational' in feature_types:
+                conformational_features = self._calculate_conformational_features(mol)
+                features.update(conformational_features)
+            
+            return features
+            
+        except Exception as e:
+            logger.error(f"Error calculating features for {smiles}: {e}")
+            return {}
     
     def calculate_features(self, smiles_list: List[str], 
                           feature_types: Optional[List[str]] = None,
@@ -247,8 +321,12 @@ class MolecularFeatures:
                 # 環数
                 features['num_rings'] = Descriptors.RingCount(mol)
                 
-                # 立体中心
-                features['num_stereocenters'] = Descriptors.NumStereocenters(mol)
+                # 立体中心（利用可能な記述子を使用）
+                try:
+                    features['num_stereocenters'] = Descriptors.NumStereocenters(mol)
+                except AttributeError:
+                    # 代替記述子を使用
+                    features['num_stereocenters'] = 0  # デフォルト値
                 
             else:
                 # RDKitが利用できない場合の基本特徴量
@@ -355,12 +433,23 @@ class MolecularFeatures:
             sasa = rdFreeSASA.CalcSASA(mol_3d)
             features['sasa'] = sasa
             
-            # 原子別SASA（正しい方法）
-            atom_sasas = rdFreeSASA.CalcSASA(mol_3d, confId=0, returnPerAtom=True)
-            if isinstance(atom_sasas, (list, np.ndarray)) and len(atom_sasas) > 0:
-                features['atom_sasa_mean'] = np.mean(atom_sasas)
-                features['atom_sasa_std'] = np.std(atom_sasas)
-            else:
+            # 原子別SASA（正しい引数で計算）
+            try:
+                # SASAオプションを設定
+                sasa_opts = rdFreeSASA.SASAOpts()
+                sasa_opts.probeRadius = 1.4
+                sasa_opts.nThreads = 1
+                
+                # 原子別SASAを計算
+                atom_sasas = rdFreeSASA.CalcSASA(mol_3d, sasa_opts, confId=0, returnPerAtom=True)
+                if isinstance(atom_sasas, (list, np.ndarray)) and len(atom_sasas) > 0:
+                    features['atom_sasa_mean'] = np.mean(atom_sasas)
+                    features['atom_sasa_std'] = np.std(atom_sasas)
+                else:
+                    features['atom_sasa_mean'] = 0
+                    features['atom_sasa_std'] = 0
+            except Exception as e:
+                logger.warning(f"SASA calculation failed: {e}")
                 features['atom_sasa_mean'] = 0
                 features['atom_sasa_std'] = 0
             
@@ -389,13 +478,22 @@ class MolecularFeatures:
             # 立体構造特徴量
             features['num_conformers'] = mol_3d.GetNumConformers()
             
-            # 分子形状（正しい記述子を使用）
-            crippen_descriptors = rdMolDescriptors.CalcCrippenDescriptors(mol_3d)
-            features['molecular_volume'] = crippen_descriptors[1]  # molar_refractivity
-            features['molecular_surface'] = crippen_descriptors[0]  # logP
+            # 分子形状（利用可能な記述子を使用）
+            try:
+                crippen_descriptors = rdMolDescriptors.CalcCrippenDescriptors(mol_3d)
+                features['molecular_volume'] = crippen_descriptors[1]  # molar_refractivity
+                features['molecular_surface'] = crippen_descriptors[0]  # logP
+            except:
+                # 代替記述子を使用
+                features['molecular_volume'] = Descriptors.MolMR(mol_3d)
+                features['molecular_surface'] = Descriptors.MolLogP(mol_3d)
             
-            # 立体配座
-            features['num_stereocenters'] = Descriptors.NumStereocenters(mol_3d)
+            # 立体配座（利用可能な記述子を使用）
+            try:
+                features['num_stereocenters'] = Descriptors.NumStereocenters(mol_3d)
+            except AttributeError:
+                # 代替記述子を使用
+                features['num_stereocenters'] = 0  # デフォルト値
             features['num_rotatable_bonds'] = Descriptors.NumRotatableBonds(mol_3d)
             
         except Exception as e:

@@ -18,7 +18,7 @@ class TestMolecularFeatures(unittest.TestCase):
     
     def test_calculate_features_basic(self):
         """基本特徴量計算のテスト"""
-        features = self.mf.calculate_features(self.test_smiles)
+        features = self.mf.calculate_single_features(self.test_smiles)
         
         # 基本チェック
         self.assertIsInstance(features, dict)
@@ -36,7 +36,7 @@ class TestMolecularFeatures(unittest.TestCase):
     
     def test_calculate_features_stereocenters(self):
         """立体中心計算のテスト"""
-        features = self.mf.calculate_features(self.test_smiles)
+        features = self.mf.calculate_single_features(self.test_smiles)
         
         # 立体中心の数が正しく計算されているか
         self.assertIn('num_stereocenters', features)
@@ -45,7 +45,7 @@ class TestMolecularFeatures(unittest.TestCase):
     
     def test_calculate_features_sasa(self):
         """SASA計算のテスト"""
-        features = self.mf.calculate_features(self.test_smiles)
+        features = self.mf.calculate_single_features(self.test_smiles)
         
         # SASA関連の特徴量
         sasa_features = ['sasa', 'atom_sasa_mean', 'atom_sasa_std']
@@ -56,7 +56,7 @@ class TestMolecularFeatures(unittest.TestCase):
     
     def test_calculate_features_crippen(self):
         """Crippen記述子のテスト"""
-        features = self.mf.calculate_features(self.test_smiles)
+        features = self.mf.calculate_single_features(self.test_smiles)
         
         # Crippen記述子の存在チェック
         crippen_features = ['molecular_volume', 'molecular_surface']
@@ -67,14 +67,14 @@ class TestMolecularFeatures(unittest.TestCase):
     def test_invalid_smiles(self):
         """無効なSMILESのテスト"""
         invalid_smiles = "invalid_smiles"
-        features = self.mf.calculate_features(invalid_smiles)
+        features = self.mf.calculate_single_features(invalid_smiles)
         
         # 無効なSMILESの場合は空辞書またはデフォルト値
         self.assertIsInstance(features, dict)
     
     def test_empty_smiles(self):
         """空のSMILESのテスト"""
-        features = self.mf.calculate_features("")
+        features = self.mf.calculate_single_features("")
         self.assertIsInstance(features, dict)
 
 if __name__ == '__main__':
