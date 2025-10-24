@@ -1,0 +1,43 @@
+# Development dependencies
+-r requirements.txt
+
+# Testing
+pytest>=6.0.0
+pytest-cov>=2.0.0
+pytest-xdist>=2.0.0
+pytest-mock>=3.0.0
+pytest-benchmark>=3.0.0
+
+# Code quality
+black>=21.0.0
+flake8>=3.8.0
+mypy>=0.800
+isort>=5.0.0
+pre-commit>=2.0.0
+
+# Documentation
+sphinx>=4.0.0
+sphinx-rtd-theme>=1.0.0
+nbsphinx>=0.8.0
+sphinx-autodoc-typehints>=1.0.0
+
+# Jupyter
+jupyter>=1.0.0
+ipykernel>=6.0.0
+nbconvert>=6.0.0
+
+# Profiling
+memory-profiler>=0.60.0
+line-profiler>=3.0.0
+
+# Security
+bandit>=1.6.0
+safety>=1.8.0
+
+# Type checking
+types-requests>=2.25.0
+types-PyYAML>=5.4.0
+
+# CI/CD
+tox>=3.20.0
+coverage>=5.0.0

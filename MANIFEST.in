@@ -1,0 +1,70 @@
+# Include package data
+include README.md
+include LICENSE
+include requirements.txt
+include requirements-dev.txt
+include pyproject.toml
+include .gitignore
+
+# Include configuration files
+recursive-include molecular_pwa_pet/configs *.yaml
+recursive-include molecular_pwa_pet/configs *.yml
+
+# Include data files
+recursive-include molecular_pwa_pet/data *.csv
+recursive-include molecular_pwa_pet/data *.json
+recursive-include molecular_pwa_pet/data *.txt
+
+# Include example files
+recursive-include examples *.py
+recursive-include examples *.ipynb
+
+# Include test files
+recursive-include tests *.py
+recursive-include tests *.yaml
+recursive-include tests *.yml
+
+# Include documentation
+recursive-include docs *.rst
+recursive-include docs *.md
+recursive-include docs *.py
+
+# Include notebooks
+recursive-include notebooks *.ipynb
+
+# Include scripts
+recursive-include scripts *.py
+
+# Exclude compiled Python files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+
+# Exclude test files from package
+exclude tests/*
+exclude examples/*
+exclude notebooks/*
+exclude docs/*
+exclude scripts/*
+
+# Exclude development files
+exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude tox.ini
+exclude .github/*
+exclude .vscode/*
+exclude .idea/*
+
+# Exclude large data files
+global-exclude *.h5
+global-exclude *.hdf5
+global-exclude *.pkl
+global-exclude *.pickle
+global-exclude *.pt
+global-exclude *.pth
+global-exclude *.ckpt
+
+# Exclude temporary files
+global-exclude *.tmp
+global-exclude *.temp
+global-exclude *~
